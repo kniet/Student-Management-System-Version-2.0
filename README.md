@@ -6,6 +6,7 @@ Student Management System is a web application built using the Java Spring and H
 * Hibernate
 * Java Server Pages (JSP)
 * Tomcat
+* Maven
 
 # Requirements
 To run this application, you will need:
