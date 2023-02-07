@@ -12,7 +12,7 @@
     <title>Home Page</title>
 </head>
 <body>
-    <img src="${pageContext.request.contextPath}/resources/images/StudentSmall.png">
+    <img src="${pageContext.request.contextPath}/resources/images/StudentSmall.png" alt="logo">
     <ul>
         <li><a class="active" href="${pageContext.request.contextPath}/HomePage/">Home page</a></li>
         <li><a href="${pageContext.request.contextPath}/AdminPanel/">Admin panel</a></li>
