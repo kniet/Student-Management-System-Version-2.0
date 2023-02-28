@@ -17,20 +17,18 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 @Configuration
 @EnableWebMvc
 @EnableTransactionManagement
 @EnableAspectJAutoProxy
 @ComponentScan("com.kniet")
-@PropertySource({ "classpath:persistence-mysql.properties" })
+@PropertySource({ "classpath:persistence-mysql.properties",
+                    "classpath:security-persistence-mysql.properties"})
 public class AppConfig implements WebMvcConfigurer {
 
     @Autowired
     private Environment env;
-
-    private Logger logger = Logger.getLogger(getClass().getName());
 
     // define a bean for ViewResolver
     @Bean
@@ -42,6 +40,27 @@ public class AppConfig implements WebMvcConfigurer {
         viewResolver.setSuffix(".jsp");
 
         return viewResolver;
+    }
+
+    @Bean
+    public DataSource securityDataSource() {
+        ComboPooledDataSource dataSource = new ComboPooledDataSource();
+
+        try {
+            dataSource.setDriverClass(env.getProperty("security.jdbc.driver"));
+        } catch (PropertyVetoException exc) {
+            throw new RuntimeException(exc);
+        }
+        dataSource.setJdbcUrl(env.getProperty("security.jdbc.url"));
+        dataSource.setUser(env.getProperty("security.jdbc.user"));
+        dataSource.setPassword(env.getProperty("security.jdbc.password"));
+
+        dataSource.setInitialPoolSize(getIntProperty("security.connection.pool.initialPoolSize"));
+        dataSource.setMinPoolSize(getIntProperty("security.connection.pool.minPoolSize"));
+        dataSource.setMaxPoolSize(getIntProperty("security.connection.pool.maxPoolSize"));
+        dataSource.setMaxIdleTime(getIntProperty("security.connection.pool.maxIdleTime"));
+
+        return dataSource;
     }
 
     @Bean
@@ -57,10 +76,6 @@ public class AppConfig implements WebMvcConfigurer {
         catch (PropertyVetoException exc) {
             throw new RuntimeException(exc);
         }
-
-//        // for sanity's sake, let's log url and user ... just to make sure we are reading the data
-//        logger.info("jdbc.url=" + env.getProperty("jdbc.url"));
-//        logger.info("jdbc.user=" + env.getProperty("jdbc.user"));
 
         // set database connection props
         myDataSource.setJdbcUrl(env.getProperty("jdbc.url"));
@@ -85,16 +100,6 @@ public class AppConfig implements WebMvcConfigurer {
         props.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
 
         return props;
-    }
-
-    private int getIntProperty(String propName) {
-
-        String propVal = env.getProperty(propName);
-
-        // now convert to int
-        int intPropVal = Integer.parseInt(propVal);
-
-        return intPropVal;
     }
 
     @Bean
@@ -127,5 +132,10 @@ public class AppConfig implements WebMvcConfigurer {
         registry
                 .addResourceHandler("/resources/**")
                 .addResourceLocations("/resources/");
+    }
+
+    private int getIntProperty(String string) {
+        String string2 = env.getProperty(string);
+        return Integer.parseInt(string2);
     }
 }
