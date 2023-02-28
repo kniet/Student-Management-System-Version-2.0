@@ -1,5 +1,5 @@
 # Student-Management-System
-Student Management System is a web application built using the Java Spring and Hibernate frameworks. It allows for the management of student informations and registraion new users.
+Student Management System is a web application built using the Java Spring and Hibernate frameworks. It allows for the management of student informations and registration new users.
 
 # Technologies:
 * Spring MVC
@@ -26,4 +26,4 @@ To run this application, you will need:
 6. Build and deploy the application to your web server
 
 # Usage
-To log into the application, use the username "admin" and password "admin". Once logged in, you will be able to add, edit, search and delete students and view informations about them. You can also create new users through the registration panel. There is only one "admin" role, the rest of users have basic roles, so you can see how the authorization works.
+To log into the application, use the username "admin" and password "admin" or username "kuba" and password "abc". Once logged in, you will be able to add, edit, search and delete students and view informations about them. You can also create new users through the registration panel. There is only one "admin" role, the rest of users have basic roles, so you can see how the authorization works.
